@@ -14,14 +14,19 @@ This project serves the exported Next.js frontend from Django so you can run one
 
 ## Railway setup
 
-Use one Railway service with these commands:
+Use the root `Dockerfile` so Railway builds both Node and Python in one service.
 
-- Build command:
-   - `cd frontend && npm ci && npm run build && cd ../backend && python -m pip install -r requirements.txt && python manage.py collectstatic --noinput`
-- Start command:
-   - `cd backend && python manage.py migrate && gunicorn backend.wsgi:application --bind 0.0.0.0:$PORT`
+Railway deploy behavior:
 
-Railway does not run `makemigrations` or `migrate` automatically. `makemigrations` should stay local for code changes, and `migrate` needs to run in your deploy command or startup command like above.
+- Build happens inside the Docker image.
+- `python manage.py migrate` runs at container startup.
+- `makemigrations` does not run automatically. Keep it local when you change models.
+
+## Docker deploy notes
+
+- The Django admin is available at `/django-admin/`.
+- The frontend app is served at `/`, `/students/`, and `/admin/`.
+- The frontend export is built during the Docker image build.
 
 ## Environment variables
 
