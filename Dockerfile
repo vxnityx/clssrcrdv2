@@ -22,8 +22,8 @@ COPY backend /app/backend
 COPY frontend /app/frontend
 COPY package.json /app/package.json
 
-WORKDIR /app/frontend
-RUN npm ci && npm run build
+WORKDIR /app
+RUN npm install --prefix frontend && npm run --prefix frontend build
 
 WORKDIR /app/backend
 RUN python manage.py collectstatic --noinput
